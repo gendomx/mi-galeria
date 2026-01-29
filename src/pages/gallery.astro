@@ -1,18 +1,23 @@
 ---
-const files = await Astro.glob('/public/uploads/**/*.{jpg,jpeg,png,webp}');
+const imageModules = import.meta.glob(
+  '/public/uploads/**/*.{jpg,jpeg,png,webp}',
+  { eager: true, as: 'url' }
+);
 
-// Agrupar por carpeta (proyecto)
+// Agrupar por proyecto (carpeta)
 const projects = {};
 
-files.forEach((img) => {
-  const cleanPath = img.default.replace(/^.*\/uploads\//, '');
+Object.values(imageModules).forEach((url) => {
+  // url ya es string tipo "/uploads/proyecto/img.jpg"
+  const cleanPath = url.replace(/^\/uploads\//, '');
   const parts = cleanPath.split('/');
   const project = parts.length > 1 ? parts[0] : 'Otros';
 
   if (!projects[project]) projects[project] = [];
-  projects[project].push(`/uploads/${cleanPath}`);
+  projects[project].push(url);
 });
 ---
+
 
 
 <!DOCTYPE html>
