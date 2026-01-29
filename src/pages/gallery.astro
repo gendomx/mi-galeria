@@ -1,0 +1,50 @@
+---
+const images = [
+  "/uploads/art1.jpg",
+  "/uploads/art2.jpg",
+  "/uploads/art3.jpg"
+];
+---
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <title>Galería</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        margin: 0;
+        font-family: system-ui;
+        background: #0f0f0f;
+        color: white;
+      }
+      h1 {
+        text-align: center;
+        padding: 2rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 1rem;
+        padding: 1rem;
+      }
+      img {
+        width: 100%;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: transform .2s ease;
+      }
+      img:hover {
+        transform: scale(1.03);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Galería</h1>
+    <div class="grid">
+      {images.map(img => (
+        <img src={img} loading="lazy" />
+      ))}
+    </div>
+  </body>
+</html>
