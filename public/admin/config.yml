@@ -8,9 +8,8 @@ public_folder: "/uploads"
 collections:
   - name: "gallery"
     label: "Galería"
-    folder: "public/uploads"
+    folder: "src/content/gallery"
     create: true
-    delete: false
-    slug: "{{filename}}"
+    slug: "{{slug}}"
     fields:
       - { label: "Imagen", name: "image", widget: "image" }
