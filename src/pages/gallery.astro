@@ -1,6 +1,6 @@
 ---
 const images = (await Astro.glob('/public/uploads/*.{jpg,jpeg,png,webp}'))
-  .map(img => img.file.replace('/public', ''));
+  .map((img) => img.default);
 ---
 
 <!DOCTYPE html>
