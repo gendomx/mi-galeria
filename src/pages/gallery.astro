@@ -1,10 +1,8 @@
 ---
-const images = Object.values(
-  import.meta.glob('/public/uploads/*.{jpg,jpeg,png,webp}', {
-    eager: true
-  })
-).map((img) => img.default.replace('/public', ''));
+const images = (await Astro.glob('/public/uploads/*.{jpg,jpeg,png,webp}'))
+  .map(img => img.file.replace('/public', ''));
 ---
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
