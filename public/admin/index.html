@@ -4,25 +4,15 @@
     <meta charset="utf-8" />
     <title>Admin</title>
 
-    <!-- 🔑 NETLIFY IDENTITY (OBLIGATORIO) -->
+    <!-- Netlify Identity (obligatorio) -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-    <!-- DECAP CMS -->
+    <!-- Decap CMS -->
     <script src="https://unpkg.com/decap-cms@3.10.0/dist/decap-cms.js"></script>
   </head>
-  <body>
-    <div id="nc-root"></div>
 
-    <script>
-      if (window.netlifyIdentity) {
-        window.netlifyIdentity.on("init", user => {
-          if (!user) {
-            window.netlifyIdentity.on("login", () => {
-              document.location.href = "/admin/";
-            });
-          }
-        });
-      }
-    </script>
+  <body>
+    <!-- ⚠️ El body NO debe estar vacío, pero tampoco necesita root -->
+    <noscript>You need JavaScript to run the CMS.</noscript>
   </body>
 </html>
