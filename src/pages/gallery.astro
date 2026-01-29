@@ -1,6 +1,17 @@
 ---
-const images = (await Astro.glob('/public/uploads/*.{jpg,jpeg,png,webp}'))
-  .map((img) => img.default.replace(/^.*\/uploads/, '/uploads'));
+const files = await Astro.glob('/public/uploads/**/*.{jpg,jpeg,png,webp}');
+
+// Agrupar por carpeta (proyecto)
+const projects = {};
+
+files.forEach((img) => {
+  const cleanPath = img.default.replace(/^.*\/uploads\//, '');
+  const parts = cleanPath.split('/');
+  const project = parts.length > 1 ? parts[0] : 'Otros';
+
+  if (!projects[project]) projects[project] = [];
+  projects[project].push(`/uploads/${cleanPath}`);
+});
 ---
 
 
@@ -81,11 +92,18 @@ const images = (await Astro.glob('/public/uploads/*.{jpg,jpeg,png,webp}'))
 <body>
   <h1>Galería</h1>
 
-  <div class="grid">
-    {images.map((src) => (
-      <img src={src} alt="Artwork" />
-    ))}
-  </div>
+  {Object.entries(projects).map(([name, images]) => (
+  <section style="margin-bottom: 3rem;">
+    <h2 style="padding: 1rem;">{name}</h2>
+
+    <div class="grid">
+      {images.map((src) => (
+        <img src={src} alt={name} />
+      ))}
+    </div>
+  </section>
+))}
+
 
   <div class="lightbox" id="lightbox">
     <button class="nav left" id="prev">‹</button>
