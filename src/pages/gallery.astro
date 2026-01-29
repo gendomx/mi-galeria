@@ -7,44 +7,145 @@ const images = [
 ---
 <!DOCTYPE html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8" />
-    <title>Galería</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <style>
-      body {
-        margin: 0;
-        font-family: system-ui;
-        background: #0f0f0f;
-        color: white;
+<head>
+  <meta charset="utf-8" />
+  <title>Galería</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui;
+      background: #0f0f0f;
+      color: white;
+    }
+
+    h1 {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1rem;
+      padding: 1rem;
+    }
+
+    .grid img {
+      width: 100%;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: transform .2s ease;
+    }
+
+    .grid img:hover {
+      transform: scale(1.03);
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.9);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 12px;
+    }
+
+    .nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: white;
+      font-size: 4rem;
+      cursor: pointer;
+      padding: 1rem;
+      opacity: 0.6;
+      user-select: none;
+    }
+
+    .nav:hover {
+      opacity: 1;
+    }
+
+    .nav.left { left: 2rem; }
+    .nav.right { right: 2rem; }
+  </style>
+</head>
+
+<body>
+  <h1>Galería</h1>
+
+  <div class="grid">
+    {images.map(img => (
+      <img src={img} alt="Artwork" />
+    ))}
+  </div>
+
+  <div class="lightbox" id="lightbox">
+    <button class="nav left" id="prev">‹</button>
+    <img id="lightbox-img" />
+    <button class="nav right" id="next">›</button>
+  </div>
+
+  <script is:inline>
+    document.addEventListener("DOMContentLoaded", () => {
+      const thumbs = document.querySelectorAll(".grid img");
+      const lightbox = document.getElementById("lightbox");
+      const lightboxImg = document.getElementById("lightbox-img");
+      const prevBtn = document.getElementById("prev");
+      const nextBtn = document.getElementById("next");
+
+      let current = 0;
+      const sources = Array.from(thumbs).map(i => i.src);
+
+      function open(index) {
+        current = index;
+        lightboxImg.src = sources[current];
+        lightbox.style.display = "flex";
       }
-      h1 {
-        text-align: center;
-        padding: 2rem;
+
+      function close() {
+        lightbox.style.display = "none";
       }
-      .grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 1rem;
-        padding: 1rem;
+
+      function show(dir) {
+        current = (current + dir + sources.length) % sources.length;
+        lightboxImg.src = sources[current];
       }
-      img {
-        width: 100%;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: transform .2s ease;
-      }
-      img:hover {
-        transform: scale(1.03);
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Galería</h1>
-    <div class="grid">
-      {images.map(img => (
-        <img src={img} loading="lazy" />
-      ))}
-    </div>
-  </body>
+
+      thumbs.forEach((img, i) => {
+        img.addEventListener("click", () => open(i));
+      });
+
+      prevBtn.addEventListener("click", e => {
+        e.stopPropagation();
+        show(-1);
+      });
+
+      nextBtn.addEventListener("click", e => {
+        e.stopPropagation();
+        show(1);
+      });
+
+      lightbox.addEventListener("click", close);
+
+      document.addEventListener("keydown", e => {
+        if (lightbox.style.display !== "flex") return;
+        if (e.key === "Escape") close();
+        if (e.key === "ArrowRight") show(1);
+        if (e.key === "ArrowLeft") show(-1);
+      });
+    });
+  </script>
+</body>
 </html>
