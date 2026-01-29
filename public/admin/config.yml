@@ -12,4 +12,11 @@ collections:
     create: true
     slug: "{{slug}}"
     fields:
-      - { label: "Imagen", name: "image", widget: "image" }
+  - label: Título
+    name: title
+    widget: string
+
+  - label: Imagen
+    name: image
+    widget: image
+
